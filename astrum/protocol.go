@@ -29,13 +29,13 @@ type AstrumHeader struct {
 	Nonce      types.BlockNonce
 }
 
-func (a *AstrumPLightClient) protocol(input []byte, chain consensus.ChainHeaderReader) (b []byte, err error) {
-	data, err := a.decodeInput(input)
+func (a *AstrumPLightClient) Verify(input []byte, chain consensus.ChainHeaderReader) (b []byte, err error) {
+	data, err := a.DecodeInput(input)
 	if err != nil {
 		return b, err
 	}
 
-	b, err = a.encodeHeader(chain, data.Height)
+	b, err = a.EncodeHeader(chain, data.Height)
 	if err != nil {
 		return b, err
 	}
@@ -44,7 +44,7 @@ func (a *AstrumPLightClient) protocol(input []byte, chain consensus.ChainHeaderR
 
 }
 
-func (a *AstrumPLightClient) encodeHeader(chain consensus.ChainHeaderReader, height uint64) (result []byte, err error) {
+func (a *AstrumPLightClient) EncodeHeader(chain consensus.ChainHeaderReader, height uint64) (result []byte, err error) {
 	header := chain.GetHeaderByNumber(height)
 
 	astrumHeader := &AstrumHeader{
@@ -71,7 +71,7 @@ func (a *AstrumPLightClient) encodeHeader(chain consensus.ChainHeaderReader, hei
 	return result, nil
 }
 
-func (a *AstrumPLightClient) decodeInput(input []byte) (result InputData, err error) {
+func (a *AstrumPLightClient) DecodeInput(input []byte) (result InputData, err error) {
 
 	if len(input) != 64 {
 		return result, errors.New("invalid input length")
